@@ -1,3 +1,4 @@
+import json
 import time
 import paho.mqtt.client as mqtt
 from dotenv import dotenv_values
@@ -17,7 +18,11 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     print("Message received: " + msg.payload.decode())
-    
+    try:
+        data = json.loads(msg.payload.decode())
+    except json.decoder.JSONDecodeError:
+        pass #don't read non-json data
+
 
 # Create MQTT client instance
 client = mqtt.Client()
