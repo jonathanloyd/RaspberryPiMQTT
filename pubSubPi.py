@@ -1,5 +1,5 @@
 import json
-import time
+import datetime
 import paho.mqtt.client as mqtt
 from dotenv import dotenv_values
 
@@ -18,10 +18,18 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     print("Message received: " + msg.payload.decode())
+    data = None
+    sensorTime, sensorReading = None, None
+
     try:
         data = json.loads(msg.payload.decode())
     except json.decoder.JSONDecodeError:
-        pass #don't read non-json data
+        pass  # don't read non-json data
+    if data and data["messageType"] == "sensorReading":
+        sensorTime = data["epochTime"]
+        sensorReading = data["sensorReading"]
+        print("Sensor Time: " + str(datetime.datetime.fromtimestamp(sensorTime).strftime('%c')))
+        print("Sensor Reading: " + str(sensorReading))
 
 
 # Create MQTT client instance
