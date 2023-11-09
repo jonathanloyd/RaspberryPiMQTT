@@ -1,5 +1,6 @@
-import json
 import datetime
+import json
+import pyodbc
 import paho.mqtt.client as mqtt
 from dotenv import dotenv_values
 
@@ -9,6 +10,12 @@ hostname = config["HOSTNAME"]
 broker_port = int(config["BROKER_PORT"])
 in_topic = config["IN_TOPIC"]
 out_topic = config["OUT_TOPIC"]
+
+# Make sure to give the pi's ip firewall permissions in Azure DB Server
+db_server = config["DB_SERVER"]
+db_name = config["DB_NAME"]
+db_username = config["DB_USERNAME"]
+db_password = config["DB_PASSWORD"]
 
 
 def on_connect(client, userdata, flags, rc):
@@ -31,6 +38,11 @@ def on_message(client, userdata, msg):
         print("Sensor Time: " + str(datetime.datetime.fromtimestamp(sensorTime).strftime('%c')))
         print("Sensor Reading: " + str(sensorReading))
 
+
+# Create db connection
+dbConnectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={db_server};DATABASE={db_name};UID={db_username};PWD={db_password}'
+dbConnection = pyodbc.connect(dbConnectionString)
+print("Connected to DB")
 
 # Create MQTT client instance
 client = mqtt.Client()
