@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
         print("Sensor Reading: " + str(sensorReading))
 
 
-# Create db connection
+# Create DB connection
 dbConnectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={db_server};DATABASE={db_name};UID={db_username};PWD={db_password}'
 dbConnection = pyodbc.connect(dbConnectionString)
 print("Connected to DB")
@@ -53,6 +53,7 @@ client.on_message = on_message
 
 # Connect to MQTT broker using connect() api and keepalive for 60s
 client.connect(hostname, broker_port, 60)
+print("Connected to MQTT broker")
 
 payload = "test message from raspberrypi"
 print("Publishing " + payload + " to topic: " + out_topic)
