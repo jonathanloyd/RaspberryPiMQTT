@@ -38,6 +38,9 @@ def on_message(client, userdata, msg):
         print("Sensor Time: " + str(datetime.datetime.fromtimestamp(sensorTime).strftime('%c')))
         print("Sensor Reading: " + str(sensorReading))
 
+        with dbConnection.cursor() as cursor:
+            readingInsertionStatment = f"INSERT INTO [dbo].[WifiSensorReadings] (ReadingTime, SensorReading) values ({sensorTime}, {sensorReading});"
+            cursor.execute(readingInsertionStatment)
 
 # Create DB connection
 dbConnectionString = f'DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={db_server};DATABASE={db_name};UID={db_username};PWD={db_password}'
