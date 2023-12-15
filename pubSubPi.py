@@ -56,7 +56,6 @@ client.on_message = on_message
 
 # Connect to MQTT broker using connect() api and keepalive for 60s
 client.connect(hostname, broker_port, 60)
-print("Connected to MQTT broker")
 
 payload = "test message from raspberrypi"
 print("Publishing " + payload + " to topic: " + out_topic)
